@@ -1,10 +1,4 @@
 <app-navbar />
-
-@if (data) {
-<div>
-  <h2>Data from API</h2>
-  <pre>{{ data | json }}</pre>
+<div class="container">
+  <router-outlet />
 </div>
-}
-
-<router-outlet />
