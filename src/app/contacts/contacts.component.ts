@@ -28,4 +28,8 @@ export class ContactsComponent implements OnInit {
   updateContact(id: number) {
     this.router.navigate(['update-contact', id]);
   }
+
+  veiwContact(id: number) {
+    this.router.navigate(['contact', id]);
+  }
 }

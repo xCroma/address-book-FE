@@ -1,15 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Contact } from '../contact/contact.model';
-import { ContactService } from '../contact/contact.service';
-import { ActivatedRoute } from '@angular/router';
-import {
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, of, tap } from 'rxjs';
 import { ContactDTO } from '../contact/contact-dto';
+import { Contact } from '../contact/contact.model';
+import { ContactService } from '../contact/contact.service';
 
 @Component({
   selector: 'app-update-contact',
@@ -25,7 +20,8 @@ export class UpdateContactComponent implements OnInit {
 
   constructor(
     private contactService: ContactService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) {}
 
   contactForm = new FormGroup({
@@ -98,6 +94,11 @@ export class UpdateContactComponent implements OnInit {
           console.error('There was an error!', error);
         },
       });
+      this.router.navigate(['contacts']);
     }
+  }
+
+  onReturn() {
+    this.router.navigate(['contacts']);
   }
 }
