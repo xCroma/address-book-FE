@@ -32,4 +32,10 @@ export class ContactsComponent implements OnInit {
   veiwContact(id: number) {
     this.router.navigate(['contact', id]);
   }
+
+  deleteContact(id: number) {
+    this.contactService
+      .deleteContact(id)
+      .subscribe(() => console.log('contact ' + id + ' deleted'));
+  }
 }

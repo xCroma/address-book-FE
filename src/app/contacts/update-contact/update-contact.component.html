@@ -1,5 +1,5 @@
 <div class="col-md-6 offset-md-3">
-  <h3>Update Champion</h3>
+  <h3>Update Contact</h3>
   <form [formGroup]="contactForm" action="" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label>First Name</label>
@@ -30,6 +30,13 @@
         placeholder="Your phone number..."
         formControlName="phoneNumber"
       />
+      @if (contactForm.controls.phoneNumber.touched &&
+      contactForm.controls.phoneNumber.dirty &&
+      contactForm.controls.phoneNumber.invalid) {
+      <p class="alert alert-danger" role="alert">
+        Please enter a valid phone nuber: it must contain 10 numbers
+      </p>
+      }
     </div>
     <div class="form-group">
       <label>Address</label>

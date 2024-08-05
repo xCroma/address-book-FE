@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, of, tap } from 'rxjs';
 import { ContactDTO } from '../contact/contact-dto';
@@ -26,18 +31,27 @@ export class UpdateContactComponent implements OnInit {
 
   contactForm = new FormGroup({
     phoneNumber: new FormControl('', {
+      validators: [
+        Validators.required,
+        Validators.minLength(10),
+        Validators.maxLength(10),
+      ],
       nonNullable: true,
     }),
     firstName: new FormControl('', {
+      validators: [Validators.required],
       nonNullable: true,
     }),
     lastName: new FormControl('', {
+      validators: [Validators.required],
       nonNullable: true,
     }),
     address: new FormControl('', {
+      validators: [Validators.required],
       nonNullable: true,
     }),
     email: new FormControl('', {
+      validators: [Validators.required],
       nonNullable: true,
     }),
   });

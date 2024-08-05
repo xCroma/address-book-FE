@@ -29,7 +29,12 @@
         </button>
       </td>
       <td>
-        <button class="btn btn-danger btn-sm">Delete</button>
+        <button
+          (click)="deleteContact(contact.id)"
+          class="btn btn-danger btn-sm"
+        >
+          Delete
+        </button>
       </td>
     </tr>
     }
