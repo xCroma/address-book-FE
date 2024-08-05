@@ -1,15 +1,14 @@
 import { Component } from '@angular/core';
-import { ContactDTO } from '../contacts/contact/contact-dto';
-import { Contact } from '../contacts/contact/contact.model';
-import { ContactService } from '../contacts/contact/contact.service';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { catchError, tap } from 'rxjs';
+import { Router } from '@angular/router';
+import { ContactDTO } from '../contacts/contact/contact-dto';
+import { Contact } from '../contacts/contact/contact.model';
+import { ContactService } from '../contacts/contact/contact.service';
 
 @Component({
   selector: 'app-create-contact',
@@ -20,6 +19,8 @@ import { catchError, tap } from 'rxjs';
 })
 export class CreateContactComponent {
   contact: ContactDTO = new ContactDTO();
+  isValidNumber = true;
+  contacts: Contact[] = [];
 
   constructor(private contactService: ContactService, private router: Router) {}
 
@@ -50,9 +51,25 @@ export class CreateContactComponent {
     }),
   });
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.contactService.getAllContacts().subscribe((contacts) => {
+      this.contacts = contacts;
+    });
+  }
+
+  numberValid(): boolean {
+    this.isValidNumber = true;
+    return !!this.contacts.find(
+      (filteredNumber) =>
+        filteredNumber.phoneNumber === this.contactForm.value.phoneNumber
+    );
+  }
 
   onSubmit() {
+    if (!this.numberValid()) {
+      this.isValidNumber = false;
+      return;
+    }
     if (this.contactForm.valid) {
       this.contact = {
         phoneNumber: this.contactForm.controls.phoneNumber.value,

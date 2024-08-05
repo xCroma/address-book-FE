@@ -6,7 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { catchError, of, tap } from 'rxjs';
+import { catchError, map, of, tap } from 'rxjs';
 import { ContactDTO } from '../contact/contact-dto';
 import { Contact } from '../contact/contact.model';
 import { ContactService } from '../contact/contact.service';
@@ -20,8 +20,10 @@ import { ContactService } from '../contact/contact.service';
 })
 export class UpdateContactComponent implements OnInit {
   id?: number;
+  contacts: Contact[] = [];
   contact: Contact = new Contact();
   contactDTO: ContactDTO = new ContactDTO();
+  isValidNumber = true;
 
   constructor(
     private contactService: ContactService,
@@ -57,6 +59,9 @@ export class UpdateContactComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    this.contactService.getAllContacts().subscribe((contacts) => {
+      this.contacts = contacts;
+    });
     this.id = this.activatedRoute.snapshot.params['id'];
 
     this.contactService
@@ -80,7 +85,19 @@ export class UpdateContactComponent implements OnInit {
       .subscribe();
   }
 
+  numberValid(): boolean {
+    this.isValidNumber = true;
+    return !!this.contacts.find(
+      (filteredNumber) =>
+        filteredNumber.phoneNumber === this.contactForm.value.phoneNumber
+    );
+  }
+
   onSubmit() {
+    if (this.numberValid()) {
+      this.isValidNumber = false;
+      return;
+    }
     if (this.contactForm.valid && this.id) {
       this.contact = {
         id: this.contact.id,
