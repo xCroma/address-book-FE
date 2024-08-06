@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Contact } from './contact.model';
-import { ContactDTO } from './contact-dto';
+import { ContactDTO } from './contact.dto';
 
 @Injectable({
   providedIn: 'root',

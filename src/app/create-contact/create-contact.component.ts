@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -6,7 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ContactDTO } from '../contacts/contact/contact-dto';
+import { ContactDTO } from '../contacts/contact/contact.dto';
 import { Contact } from '../contacts/contact/contact.model';
 import { ContactService } from '../contacts/contact/contact.service';
 
@@ -17,9 +17,8 @@ import { ContactService } from '../contacts/contact/contact.service';
   templateUrl: './create-contact.component.html',
   styleUrl: './create-contact.component.css',
 })
-export class CreateContactComponent {
+export class CreateContactComponent implements OnInit {
   contact: ContactDTO = new ContactDTO();
-  isValidNumber = true;
   contacts: Contact[] = [];
 
   constructor(private contactService: ContactService, private router: Router) {}
@@ -58,18 +57,13 @@ export class CreateContactComponent {
   }
 
   numberValid(): boolean {
-    this.isValidNumber = true;
-    return !!this.contacts.find(
+    return !this.contacts.some(
       (filteredNumber) =>
         filteredNumber.phoneNumber === this.contactForm.value.phoneNumber
     );
   }
 
   onSubmit() {
-    if (!this.numberValid()) {
-      this.isValidNumber = false;
-      return;
-    }
     if (this.contactForm.valid) {
       this.contact = {
         phoneNumber: this.contactForm.controls.phoneNumber.value,
@@ -86,7 +80,14 @@ export class CreateContactComponent {
           console.error('There was an error!', error);
         },
       });
-      this.router.navigate(['contacts']);
+      if (!this.numberValid()) {
+        return;
+      }
+      this.router
+        .navigateByUrl('contacts', { skipLocationChange: true })
+        .then(() => {
+          this.router.navigate(['contacts']);
+        });
     }
   }
 

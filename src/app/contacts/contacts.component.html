@@ -1,21 +1,14 @@
 <br />
-<form
-  [formGroup]="searchForm"
-  (ngSubmit)="onSubmit()"
-  class="d-flex"
-  role="search"
->
+<form (ngSubmit)="onSubmit()" class="d-flex" role="search">
   <input
+    [(ngModel)]="enteredSearch"
+    [ngModelOptions]="{ standalone: true }"
+    (ngModelChange)="onSearchChange($event)"
     class="form-control me-2"
     type="search"
     placeholder="Search"
     aria-label="Search"
-    formControlName="search"
   />
-  <button class="btn btn-outline-success" type="submit">Search</button>&nbsp;
-  <button class="btn btn-outline-success" type="button" (click)="onRefresh()">
-    Refresh
-  </button>
 </form>
 <br /><br />
 <table class="table table-hover">
@@ -24,25 +17,25 @@
       <th>First Name</th>
       <th>Last Name</th>
       <th>Phone Number</th>
-      <th></th>
-      <th></th>
-      <th></th>
+      <th>View</th>
+      <th>Update</th>
+      <th>Delete</th>
     </tr>
   </thead>
   <tbody>
-    @for (contact of contacts; track contact.id) {
+    @for (contact of filteredContacts(); track contact.id) {
     <tr>
       <td>{{ contact.firstName }}</td>
       <td>{{ contact.lastName }}</td>
       <td>{{ contact.phoneNumber }}</td>
       <td>
-        <button (click)="veiwContact(contact.id)" class="btn btn-info btn-sm">
+        <button (click)="onViewContact(contact.id)" class="btn btn-info btn-sm">
           View
         </button>
       </td>
       <td>
         <button
-          (click)="updateContact(contact.id)"
+          (click)="onUpdateContact(contact.id)"
           class="btn btn-success btn-sm"
         >
           Update
@@ -50,7 +43,7 @@
       </td>
       <td>
         <button
-          (click)="deleteContact(contact.id)"
+          (click)="onDeleteContact(contact.id)"
           class="btn btn-danger btn-sm"
         >
           Delete
